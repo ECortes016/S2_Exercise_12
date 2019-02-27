@@ -41,6 +41,7 @@ function createCalendar(calDate) {
       var calendarHTML = "<table id='calendar_table'>";
       calendarHTML += calCaption(calDate);
       calendarHTML += calWeekdayRow();
+      calendarHTML += calDays(calDate);
       calendarHTML += "</table>";
       return calendarHTML;
 }
@@ -88,9 +89,51 @@ function daysInMonth(calDate) {
 
       // Revise the days in February for leap year
       if (thisYear % 4 === 0) {
-            dayCount[1] = 29
+            if ((thisYear % 100 != 0) || (thisYear % 400 === 0)) {
+
+            }
       }
 
       // Return the number of days for the current month
       return dayCount[thisMonth];
+}
+
+// Function to write the table rows for each day of the month
+
+function calDays(calDate) {
+      // Determine the starting day of the month
+      var day = new Date(calDate.getFullYear(), calDate.getMonth(), 1);
+      var weekDay = day.getDay();
+
+      // Write blank cells proceeding the starting day
+      var htmlCode = "<tr>";
+      for (var i = 0; i < weekDay; i++) {
+            htmlCode += "<td></td>";
+      }
+
+      // Write cells for each day of the month
+      var totalDays = daysInMonth(calDate);
+      var highlightDay = calDate.getDate();
+      for (var i = 1; i <= totalDays; i++) {
+            day.setDate(i);
+            weekDay = day.getDay();
+
+            // If statements
+            if (weekDay === 0) {
+                  htmlCode += "<tr>";
+            }
+
+
+            if (i === highlightDay) {
+                  htmlCode += "<td class='cal_dates' id='calendar_today'>" + i + dayEvent[i] + "</td>";
+            } else {
+                  htmlCode += "<td class='calendar_dates'>" + i + dayEvent[i] + "</td>";
+            }
+
+
+            if (weekDay === 6) {
+                  htmlCode += "</tr>";
+            }
+      }
+      return htmlCode;
 }
